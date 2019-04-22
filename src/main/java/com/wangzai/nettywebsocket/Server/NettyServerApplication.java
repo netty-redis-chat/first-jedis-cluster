@@ -49,7 +49,11 @@ public class NettyServerApplication {
                         socketChannel.pipeline().addLast(new HttpServerCodec());
                         socketChannel.pipeline().addLast(new ChunkedWriteHandler());
                         socketChannel.pipeline().addLast(new HttpObjectAggregator(65536));
-                        socketChannel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));//握手操作
+
+                        //握手操作: 基于http1.1, FullHttpRequest
+                        socketChannel.pipeline().addLast(new WebSocketServerProtocolHandler("/websocket"));
+
+                        //处理类: simpleInboundHandler
                         socketChannel.pipeline().addLast(chatRoomHandler);
 
                     }

@@ -29,10 +29,11 @@ public class NettyWebsocketApplication {
 
 	public static void main(String[] args) throws Exception {
 //		SpringApplication.run(NettyWebsocketApplication.class, args);
-
-		ConfigurableApplicationContext context = SpringApplication.run(NettyWebsocketApplication.class, args);
 //		ServerBootstrap serverBootstrap = context.getBean(ServerBootstrap.class);
 //		serverBootstrap.bind(8888).sync();
+
+        ConfigurableApplicationContext context = SpringApplication.run(NettyWebsocketApplication.class, args);
+
 		NettyServer nettyServer = context.getBean(NettyServer.class);
 		nettyServer.start();
 
