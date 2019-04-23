@@ -31,22 +31,22 @@
         <button class="btn blue" id="login" type="submit">
             登录
         </button>
-        <button class="btn green" id="register" type="submit">
-            注册
-        </button>
+        <!--<button class="btn green" id="register" type="submit">-->
+            <!--注册-->
+        <!--</button>-->
     </div>
 </div>
 </body>
 
 <script>
     $(document).ready(function() {
-        $("#register").on("click", function() {
-            window.location.href="register.html";
-        });
+        // $("#register").on("click", function() {
+        //     window.location.href="register.html";
+        // });
 
         $("#login").on("click", function() {
             var telphone = $("#telphone").val();
-            var password = $("#password").val();
+            // var password = $("#password").val();
             if (telphone == null || telphone == "") {
                 alert("手机号不能为空");
                 return false;
@@ -58,14 +58,14 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/x-www-form-urlencoded",
-                url: "http://localhost:8080/user/login",
+                url: "/user/login",
                 data: {
                     "username": telphone
                 },
                 success: function(data) {
                     if (data.status == "success") {
-                        alert("登录成功");
-                        window.location.href="chatroom/common.html";
+                        // alert("登录成功");
+                        window.location.href="/room/list";
                     } else {
                         alert("登录失败，原因为" + data.data.errMsg);
                     }

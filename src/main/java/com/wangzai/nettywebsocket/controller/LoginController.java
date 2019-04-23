@@ -29,7 +29,15 @@ public class LoginController extends BaseController{
             throw new BusinessException(EmBusinessErr.PARAMETER_VALIDATION_ERROR);
         }
 
-        this.httpServletRequest.getSession().setAttribute("user",username);
+        this.httpServletRequest.getSession().setAttribute("username",username);
+
+        return CommonReturnType.create(null);
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    public CommonReturnType login() throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+        this.httpServletRequest.getSession().invalidate();
 
         return CommonReturnType.create(null);
     }
