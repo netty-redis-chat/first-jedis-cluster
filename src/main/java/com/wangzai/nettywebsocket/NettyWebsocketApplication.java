@@ -1,6 +1,7 @@
 package com.wangzai.nettywebsocket;
 
 import com.wangzai.nettywebsocket.Server.NettyServer;
+import com.wangzai.nettywebsocket.netty.WebSocket;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,9 +24,9 @@ public class NettyWebsocketApplication {
 
         ConfigurableApplicationContext context = SpringApplication.run(NettyWebsocketApplication.class, args);
 
-		NettyServer nettyServer = context.getBean(NettyServer.class);
-		nettyServer.start();
-
+//		NettyServer nettyServer = context.getBean(NettyServer.class);
+//		nettyServer.start();
+        new WebSocket().bind(8888);
 	}
 
 
