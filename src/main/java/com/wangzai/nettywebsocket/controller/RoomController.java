@@ -75,9 +75,9 @@ public class RoomController extends BaseController {
     public String room(@PathVariable String room_id) {
         HttpSession session = httpServletRequest.getSession();
         String username = (String) session.getAttribute("username");
-        if (redisTemplate.opsForSet().isMember("chrm:"+room_id, username)) {
-            return "redirect:/room/list";
-        }
+//        if (redisTemplate.opsForSet().isMember("chrm:"+room_id, username)) {
+//            return "redirect:/room/list";
+//        }
         redisTemplate.opsForSet().add("chrm:"+room_id, username);
 
         if (session.getAttribute("root") == null) {
