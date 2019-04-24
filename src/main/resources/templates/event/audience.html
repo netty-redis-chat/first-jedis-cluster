@@ -37,41 +37,41 @@
 <script type="text/javascript">
 
 
-    var socket;
-    if (!window.WebSocket) {
-        window.WebSocket = window.MozWebSocket;
-    }
-    if (window.WebSocket) {
-        var uri = window.location.pathname;
-        var id = uri.substring(uri.lastIndexOf("/"+1));
-        // socket = new WebSocket("ws://localhost:8888/"+id);
-        socket = new WebSocket("ws://localhost:8888/stage");
-        socket.onmessage = function(event) {
-            var ta = document.getElementById('responseText');
-            ta.value = ta.value + '\n' + event.data
-        };
-        socket.onopen = function(event) {
-            var ta = document.getElementById('responseText');
-            ta.value = "连接开启!";
-        };
-        socket.onclose = function(event) {
-            var ta = document.getElementById('responseText');
-            ta.value = ta.value + "连接被关闭";
-        };
-    } else {
-        alert("你的浏览器不支持 WebSocket！");
-    }
-
-    function send(message) {
-        if (!window.WebSocket) {
-            return;
-        }
-        if (socket.readyState == WebSocket.OPEN) {
-            socket.send(message);
-        } else {
-            alert("连接没有开启.");
-        }
-    }
+    // var socket;
+    // if (!window.WebSocket) {
+    //     window.WebSocket = window.MozWebSocket;
+    // }
+    // if (window.WebSocket) {
+    //     var uri = window.location.pathname;
+    //     var id = uri.substring(uri.lastIndexOf("/"+1));
+    //     // socket = new WebSocket("ws://localhost:8888/"+id);
+    //     socket = new WebSocket("ws://localhost:8888/stage");
+    //     socket.onmessage = function(event) {
+    //         var ta = document.getElementById('responseText');
+    //         ta.value = ta.value + '\n' + event.data
+    //     };
+    //     socket.onopen = function(event) {
+    //         var ta = document.getElementById('responseText');
+    //         ta.value = "连接开启!";
+    //     };
+    //     socket.onclose = function(event) {
+    //         var ta = document.getElementById('responseText');
+    //         ta.value = ta.value + "连接被关闭";
+    //     };
+    // } else {
+    //     alert("你的浏览器不支持 WebSocket！");
+    // }
+    //
+    // function send(message) {
+    //     if (!window.WebSocket) {
+    //         return;
+    //     }
+    //     if (socket.readyState == WebSocket.OPEN) {
+    //         socket.send(message);
+    //     } else {
+    //         alert("连接没有开启.");
+    //     }
+    // }
 
     var socket2;
     if (!window.WebSocket) {
@@ -81,7 +81,7 @@
         var uri = window.location.pathname;
         var id = uri.substring(uri.lastIndexOf("/"+1));
         // socket = new WebSocket("ws://localhost:8888/"+id);
-        socket2 = new WebSocket("ws://localhost:8888/view");
+        socket2 = new WebSocket("ws://localhost:8888/view/stage");
         socket2.onmessage = function(event) {
             var ta = document.getElementById('responseText2');
             ta.value = ta.value + '\n' + event.data
@@ -102,7 +102,7 @@
         if (!window.WebSocket) {
             return;
         }
-        if (socket.readyState == WebSocket.OPEN) {
+        if (socket2.readyState == WebSocket.OPEN) {
             socket2.send(message);
         } else {
             alert("连接没有开启.");

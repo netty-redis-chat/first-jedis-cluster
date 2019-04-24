@@ -254,6 +254,14 @@ public class WebSocket {
                 }
             }
 
+            String authorUri = "/view" + uri;
+            if (channelGroups.containsKey(authorUri)) {
+                ChannelGroup authorGroup = channelGroups.get(authorUri);
+                for (Channel channel : authorGroup){
+                    channel.writeAndFlush(new TextWebSocketFrame("[" + "表演: " + incoming.remoteAddress() + "]:   " + request));
+                }
+            }
+
         }
 
         /**
