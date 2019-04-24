@@ -10,7 +10,10 @@ import javax.servlet.http.HttpSession;
 public class RoomInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        HttpSession session = httpServletRequest.getSession();
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null) {
+            return true;
+        }
         Integer room = (Integer) session.getAttribute("room"); //获取登录的session信息
         if(room==null){
             return true;
