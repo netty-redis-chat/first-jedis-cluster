@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script src="/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+<form onsubmit="return false;">
+    <h3>跑团：</h3>
+    <textarea id="responseText" style="width: 500px; height: 300px;"></textarea>
+    <br/>
+    <input type="text" name="message"  style="width: 300px" value=""/>
+    <input type="button" value="发送消息" onclick="send(this.form.message.value)"/>
+    <input type="button" onclick="javascript:document.getElementById('responseText').value=''" value="清空聊天记录"/>
+    <!--<button class="btn red" id="exit">离开</button>-->
+</form>
+<script type="text/javascript" >
+    var socket;
+    if (!window.WebSocket) {
+        window.WebSocket = window.MozWebSocket;
+    }
+    if (window.WebSocket) {
+        var uri = window.location.pathname;
+        var id = uri.substring(uri.lastIndexOf("/"+1));
+        // socket = new WebSocket("ws://localhost:8888/"+id);
+        socket = new WebSocket("ws://localhost:8888/stage");
+        socket.onmessage = function(event) {
+            var ta = document.getElementById('responseText');
+            ta.value = ta.value + '\n' + event.data
+        };
+        socket.onopen = function(event) {
+            var ta = document.getElementById('responseText');
+            ta.value = "连接开启!";
+        };
+        socket.onclose = function(event) {
+            var ta = document.getElementById('responseText');
+            ta.value = ta.value + "连接被关闭";
+        };
+    } else {
+        alert("你的浏览器不支持 WebSocket！");
+    }
+
+    function send(message) {
+        if (!window.WebSocket) {
+            return;
+        }
+        if (socket.readyState == WebSocket.OPEN) {
+            socket.send(message);
+        } else {
+            alert("连接没有开启.");
+        }
+    }
+    $('#exit').on('click',function () {
+        $.ajax({
+            type:"GET",
+            url:"/room/exit",
+            success:function (data) {
+                if(data.status=="success"){
+                    window.location.href = "/room/list";
+                    // alert("创建成功");
+                }else{
+                    alert("创建失败，原因为"+data.data.errMsg);
+                }
+            },
+            error:function (data) {
+                alert("创建失败，原因为"+data.responseText);
+            }
+        });
+    });
+</script>
+</body>
+</html>

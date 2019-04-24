@@ -24,8 +24,18 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public void create(ChatRoom chatRoom) {
         chatRoomMySQLService.insertChatRoom(chatRoom);
+//        redisTemplate.execute(new SessionCallback(){
+//            @Override
+//            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+//                redisOperations.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), httpSession.getId());
+//                redisOperations.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), (String) httpSession.getAttribute("username"));
+////                redisOperations.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), (Object) "izaya");
+//                return null;
+//            }
+//        });
         redisTemplate.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), httpSession.getId());
         redisTemplate.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), (String) httpSession.getAttribute("username"));
+//        redisTemplate.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), "izaya");
         httpSession.setAttribute("room",chatRoom.getId());
     }
 
@@ -39,6 +49,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (redisTemplate.opsForSet().isMember(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username")) ) {
             return false;
         }
+//        redisTemplate.execute(new SessionCallback(){
+//            @Override
+//            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+//                redisOperations.opsForSet().add(redisChatRoomPrefix + roomId, httpSession.getId());
+//                redisOperations.opsForSet().add(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
+//                return null;
+//            }
+//        });
         redisTemplate.opsForSet().add(redisChatRoomPrefix + roomId, httpSession.getId());
         redisTemplate.opsForSet().add(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
         httpSession.setAttribute("room",roomId);
@@ -47,6 +65,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     public void exitRoom() {
         Integer roomId = (Integer) httpSession.getAttribute("room");
+//        redisTemplate.execute(new SessionCallback(){
+//            @Override
+//            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+//                redisOperations.opsForSet().remove(redisChatRoomPrefix + roomId, httpSession.getId());
+//                redisOperations.opsForSet().remove(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
+//                return null;
+//            }
+//        });
         redisTemplate.opsForSet().remove(redisChatRoomPrefix + roomId, httpSession.getId());
         redisTemplate.opsForSet().remove(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
         httpSession.removeAttribute("room");

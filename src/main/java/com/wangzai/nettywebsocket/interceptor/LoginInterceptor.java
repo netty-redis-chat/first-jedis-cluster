@@ -12,6 +12,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession(false);
         if (session == null) {
+            httpServletResponse.sendRedirect(httpServletRequest.getContextPath()+"/");  //未登录自动跳转界面
             return false;
         }
         String user = (String) session.getAttribute("username"); //获取登录的session信息
