@@ -1,15 +1,15 @@
 package com.wangzai.nettywebsocket.pojo;
 
 public class ChatRoom {
+    private Integer id;
     private String name;
     private Integer capacity;
-    private String id;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

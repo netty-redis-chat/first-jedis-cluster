@@ -16,7 +16,7 @@ public class RootController extends BaseController {
     public String login(HttpServletRequest httpServletRequest) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
 
         HttpSession session = httpServletRequest.getSession();
-        String user = (String) session.getAttribute("user"); //获取登录的session信息
+        String user = (String) session.getAttribute("username"); //获取登录的session信息
         if(user!=null){
             return "redirect:/room/list";
         }

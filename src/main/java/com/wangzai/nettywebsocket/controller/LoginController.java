@@ -3,6 +3,7 @@ package com.wangzai.nettywebsocket.controller;
 import com.wangzai.nettywebsocket.error.BusinessException;
 import com.wangzai.nettywebsocket.error.EmBusinessErr;
 import com.wangzai.nettywebsocket.response.CommonReturnType;
+import com.wangzai.nettywebsocket.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -22,6 +23,9 @@ public class LoginController extends BaseController{
     @Autowired
     private HttpServletRequest httpServletRequest;//LocalThread 解决单例问题
 
+    @Autowired
+    ChatRoomService chatRoomService;
+
     @RequestMapping(value = "/login", method = {RequestMethod.POST}, consumes = {BaseController.CONTENT_TYPE_FORMED})
     @ResponseBody
     public CommonReturnType login(@RequestParam(name = "username") String username) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -37,8 +41,8 @@ public class LoginController extends BaseController{
     @RequestMapping("/logout")
     @ResponseBody
     public CommonReturnType login() throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
-        this.httpServletRequest.getSession().invalidate();
 
+        this.httpServletRequest.getSession().invalidate();
         return CommonReturnType.create(null);
     }
 }

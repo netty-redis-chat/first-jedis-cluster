@@ -1,12 +1,10 @@
-package com.wangzai.nettywebsocket.mapper;
+package com.wangzai.nettywebsocket.service;
 
 import com.wangzai.nettywebsocket.pojo.ChatRoom;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface ChatRoomMapper {
+public interface ChatRoomMySQLService {
     Integer insertChatRoom(ChatRoom chatRoom);
 
     List<ChatRoom> list();
@@ -14,5 +12,4 @@ public interface ChatRoomMapper {
     List<ChatRoom> search(String keyword);
 
     void deleteChatRoom(Integer id);
-
 }
