@@ -12,7 +12,6 @@ import io.netty.util.CharsetUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.Executors;
 
 public class Client {
 
@@ -45,15 +44,18 @@ public class Client {
 
             //等待handshakeFuture, 执行完handShake握手
             WebSocketClientHandler handler = (WebSocketClientHandler) future.channel().pipeline().get("WebSocketClientHandler");
-            handler.handshakeFuture().sync();
+//            handler.handshakeFuture().sync();
 
 
 
             System.out.println("握手完成");
-            future.channel().writeAndFlush(new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/view/stage"));
-            future.channel().writeAndFlush(new TextWebSocketFrame("你好"));
-
-            future.channel().closeFuture().sync();
+//            future.channel().writeAndFlush(new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/view/stage"));
+            for (int i = 0; i < 100; i++) {
+                System.out.println(i);
+                future.channel().writeAndFlush(new TextWebSocketFrame("你好"));
+                Thread.sleep(1000);
+            }
+//            future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
@@ -93,7 +95,7 @@ public class Client {
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             System.out.println("channelActive握手: " + ctx.channel());
-            handShaker.handshake(ctx.channel());
+//            handShaker.handshake(ctx.channel());
         }
 
         protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
