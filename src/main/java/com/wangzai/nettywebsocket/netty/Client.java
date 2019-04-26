@@ -8,7 +8,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.util.CharsetUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,6 +19,9 @@ public class Client {
 
         new Client().connect();
     }
+
+    public Channel channel;
+    public NioEventLoopGroup group;
 
 
     public void connect(){
@@ -50,16 +52,11 @@ public class Client {
 
             System.out.println("握手完成");
 //            future.channel().writeAndFlush(new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/view/stage"));
-            for (int i = 0; i < 100; i++) {
-                System.out.println(i);
-                future.channel().writeAndFlush(new TextWebSocketFrame("你好"));
-                Thread.sleep(1000);
-            }
-            future.channel().closeFuture().sync();
+            this.channel = future.channel();
+            this.group = group;
+//            future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-            group.shutdownGracefully();
         }
     }
 

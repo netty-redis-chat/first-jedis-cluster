@@ -84,7 +84,7 @@
         socket2 = new WebSocket("ws://localhost:8888/view/stage");
         socket2.onmessage = function(event) {
             var ta = document.getElementById('responseText2');
-            ta.value = ta.value + '\n' + event.data
+            ta.value = ta.value + '\n' + event.data+'|'+new Date().getSeconds()
         };
         socket2.onopen = function(event) {
             var ta = document.getElementById('responseText2');
