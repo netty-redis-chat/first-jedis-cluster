@@ -41,15 +41,13 @@ import java.util.logging.Logger;
  */
 public class WebSocket {
 
-
-
     public static void main(String[] args) {
         System.out.println("hello");
         new WebSocket().bind(8080);
     }
 
     private final static AttributeKey<String> roomKey = AttributeKey.newInstance("uri");
-    private final static String roomPreix = "ws:http://localhost:8080";
+    private final static String roomPreix = "ws://localhost:8080";
     private final ConcurrentHashMap<String, ChannelGroup> channelGroups = new ConcurrentHashMap<>();
     private final Logger log = Logger.getLogger(WebSocketHandler.class.getName());
 
@@ -142,7 +140,12 @@ public class WebSocket {
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
 
+
             if (msg instanceof FullHttpRequest){
+
+                System.out.println("====== " + ((FullHttpRequest) msg) + " ==========");
+                log.info(String.format("调试: %s", ((FullHttpRequest) msg).toString()));
+
                 String uri = ((FullHttpRequest) msg).uri();
                 System.out.println("房间号:" + uri);
                 log.info(String.format("建立连接: come http %s %s", ctx.channel().remoteAddress(),uri));

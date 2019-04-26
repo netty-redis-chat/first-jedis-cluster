@@ -31,6 +31,4 @@ public class NettyWebsocketApplication {
 //		nettyServer.start();
         new WebSocket().bind(8888);
 	}
-
-
 }

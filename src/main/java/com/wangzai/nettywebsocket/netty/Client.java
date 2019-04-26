@@ -40,11 +40,11 @@ public class Client {
                     });
 
             //执行handler, 首先执行handlerAdd
-            ChannelFuture future = start.connect("localhost", 8080).sync();
+            ChannelFuture future = start.connect("localhost", 8888).sync();
 
             //等待handshakeFuture, 执行完handShake握手
             WebSocketClientHandler handler = (WebSocketClientHandler) future.channel().pipeline().get("WebSocketClientHandler");
-//            handler.handshakeFuture().sync();
+            handler.handshakeFuture().sync();
 
 
 
@@ -55,7 +55,7 @@ public class Client {
                 future.channel().writeAndFlush(new TextWebSocketFrame("你好"));
                 Thread.sleep(1000);
             }
-//            future.channel().closeFuture().sync();
+            future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
@@ -95,7 +95,7 @@ public class Client {
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             System.out.println("channelActive握手: " + ctx.channel());
-//            handShaker.handshake(ctx.channel());
+            handShaker.handshake(ctx.channel());
         }
 
         protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -104,18 +104,21 @@ public class Client {
 
             //客户端发送req后需要接受一个resp
             if (!this.handShaker.isHandshakeComplete()) {
-                try {
+
                     response = (FullHttpResponse) msg;
+
+                System.out.println("==== " + response + " =====");
 
                     this.handShaker.finishHandshake(ch, response);
 
                     this.handshakeFuture.setSuccess();
                     System.out.println("连接结束: " + response.headers());
-                } catch (WebSocketHandshakeException var7) {
-                    FullHttpResponse res = (FullHttpResponse) msg;
-                    String errorMsg = String.format("WebSocket Client failed to connect,status:%s,reason:%s", res.status(), res.content().toString(CharsetUtil.UTF_8));
-                    this.handshakeFuture.setFailure(new Exception(errorMsg));
-                }
+
+//                } catch (WebSocketHandshakeException var7) {
+//                    FullHttpResponse res = (FullHttpResponse) msg;
+//                    String errorMsg = String.format("WebSocket Client failed to connect,status:%s,reason:%s", res.status(), res.content().toString(CharsetUtil.UTF_8));
+//                    this.handshakeFuture.setFailure(new Exception(errorMsg));
+//                }
             } else {
 
                 WebSocketFrame frame = (WebSocketFrame) msg;
