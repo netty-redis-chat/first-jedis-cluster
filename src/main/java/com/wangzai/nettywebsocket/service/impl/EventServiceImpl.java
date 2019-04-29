@@ -57,8 +57,11 @@ public class EventServiceImpl implements EventService {
 //                return role;
 //            }
 //        });
+        
+        //事务管理
         String role = (String) redisTemplate.opsForSet().pop(rolesKey);
         redisTemplate.opsForHash().put(userRoleKey, id, role);
+        //事务管理
         return true;
     }
 
