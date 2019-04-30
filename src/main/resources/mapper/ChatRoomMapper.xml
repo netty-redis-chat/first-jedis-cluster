@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wangzai.nettywebsocket.mapper.ChatRoomMapper">
+
+    <resultMap id="BaseResultMap" type="com.wangzai.nettywebsocket.pojo.ChatRoom">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="capacity" jdbcType="INTEGER" property="capacity" />
+    </resultMap>
+
+    <insert id="insertChatRoom" parameterType="com.wangzai.nettywebsocket.pojo.ChatRoom" keyProperty="id" useGeneratedKeys="true" >
+        INSERT INTO chatroom
+         (name,capacity)
+        VALUES
+         (#{name},#{capacity})
+    </insert>
+    <select id="list"  resultMap="BaseResultMap">
+        SELECT id,name,capacity
+        FROM chatroom
+    </select>
+
+    <select id="serach" parameterType="String" resultMap="BaseResultMap">
+        SELECT id,name,capacity
+        FROM chatroom
+        WHERE name LIKE CONCAT('%',#{keyword},'%')
+    </select>
+
+
+    <delete id="deleteChatRoom" parameterType="Integer">
+        DELETE from chatroom
+        where id = #{id}
+    </delete>
+
+</mapper>

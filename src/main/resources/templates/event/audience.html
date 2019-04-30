@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script src="/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <form onsubmit="return false;">
+                <h3>WebSocket 直播室：</h3>
+                <textarea id="responseText" style="width: 500px; height: 300px;"></textarea>
+                <br/>
+                <!--<input type="text" name="message"  style="width: 300px" value=""/>-->
+                <!--<input type="button" value="发送消息" onclick="send(this.form.message.value)"/>-->
+                <!--<input type="button" onclick="javascript:document.getElementById('responseText').value=''" value="清空聊天记录"/>-->
+                <!--<button class="btn red" id="exit">离开</button>-->
+            </form>
+        </div>
+        <div class="col-xs-6">
+            <form onsubmit="return false;">
+                <h3>直播弹幕</h3>
+                <textarea id="responseText2" style="width: 500px; height: 300px;"></textarea>
+                <br/>
+                <input type="text" name="message"  style="width: 300px" value=""/>
+                <input type="button" value="发送消息" onclick="send2(this.form.message.value)"/>
+                <input type="button" onclick="javascript:document.getElementById('responseText').value=''" value="清空聊天记录"/>
+                <!--<button class="btn red" id="exit">离开</button>-->
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+
+
+    // var socket;
+    // if (!window.WebSocket) {
+    //     window.WebSocket = window.MozWebSocket;
+    // }
+    // if (window.WebSocket) {
+    //     var uri = window.location.pathname;
+    //     var id = uri.substring(uri.lastIndexOf("/"+1));
+    //     // socket = new WebSocket("ws://localhost:8888/"+id);
+    //     socket = new WebSocket("ws://localhost:8888/stage");
+    //     socket.onmessage = function(event) {
+    //         var ta = document.getElementById('responseText');
+    //         ta.value = ta.value + '\n' + event.data
+    //     };
+    //     socket.onopen = function(event) {
+    //         var ta = document.getElementById('responseText');
+    //         ta.value = "连接开启!";
+    //     };
+    //     socket.onclose = function(event) {
+    //         var ta = document.getElementById('responseText');
+    //         ta.value = ta.value + "连接被关闭";
+    //     };
+    // } else {
+    //     alert("你的浏览器不支持 WebSocket！");
+    // }
+    //
+    // function send(message) {
+    //     if (!window.WebSocket) {
+    //         return;
+    //     }
+    //     if (socket.readyState == WebSocket.OPEN) {
+    //         socket.send(message);
+    //     } else {
+    //         alert("连接没有开启.");
+    //     }
+    // }
+
+    var socket2;
+    if (!window.WebSocket) {
+        window.WebSocket = window.MozWebSocket;
+    }
+    if (window.WebSocket) {
+        var uri = window.location.pathname;
+        var id = uri.substring(uri.lastIndexOf("/"+1));
+        // socket = new WebSocket("ws://localhost:8888/"+id);
+        socket2 = new WebSocket("ws://localhost:8888/view/stage");
+        socket2.onmessage = function(event) {
+            var ta = document.getElementById('responseText2');
+            ta.value = ta.value + '\n' + event.data+'|'+new Date().toTimeString()
+        };
+        socket2.onopen = function(event) {
+            var ta = document.getElementById('responseText2');
+            ta.value = "连接开启!";
+        };
+        socket2.onclose = function(event) {
+            var ta = document.getElementById('responseText2');
+            ta.value = ta.value + "连接被关闭";
+        };
+    } else {
+        alert("你的浏览器不支持 WebSocket！");
+    }
+
+    function send2(message) {
+        if (!window.WebSocket) {
+            return;
+        }
+        if (socket2.readyState == WebSocket.OPEN) {
+            socket2.send(message);
+        } else {
+            alert("连接没有开启.");
+        }
+    }
+</script>
+</html>
