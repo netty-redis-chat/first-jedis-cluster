@@ -50,7 +50,7 @@ public class Client {
 
 
 
-            System.out.println("握手完成");
+        //    System.out.println("握手完成");
 //            future.channel().writeAndFlush(new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/view/stage"));
             this.channel = future.channel();
             this.group = group;
@@ -91,7 +91,7 @@ public class Client {
          */
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            System.out.println("channelActive握手: " + ctx.channel());
+           // System.out.println("channelActive握手: " + ctx.channel());
             handShaker.handshake(ctx.channel());
         }
 
@@ -104,12 +104,12 @@ public class Client {
 
                     response = (FullHttpResponse) msg;
 
-                System.out.println("==== " + response + " =====");
+//                System.out.println("==== " + response + " =====");
 
                     this.handShaker.finishHandshake(ch, response);
 
                     this.handshakeFuture.setSuccess();
-                    System.out.println("连接结束: " + response.headers());
+           //         System.out.println("连接结束: " + response.headers());
 
 //                } catch (WebSocketHandshakeException var7) {
 //                    FullHttpResponse res = (FullHttpResponse) msg;
@@ -121,7 +121,7 @@ public class Client {
                 WebSocketFrame frame = (WebSocketFrame) msg;
                 if (frame instanceof TextWebSocketFrame) {
                     TextWebSocketFrame textFrame = (TextWebSocketFrame) frame;
-                    System.out.println(ctx.channel().remoteAddress() + ": " + ((TextWebSocketFrame) frame).text());
+//                    System.out.println(ctx.channel().remoteAddress() + ": " + ((TextWebSocketFrame) frame).text());
                 } else {
                     ch.close();
                 }

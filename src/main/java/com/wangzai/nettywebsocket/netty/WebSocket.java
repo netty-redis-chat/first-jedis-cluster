@@ -123,9 +123,9 @@ public class WebSocket {
             if (group.size() == 0){
                 channelGroups.remove(room);
             } else {
-                for (Channel channel : group) {
-                    channel.writeAndFlush(new TextWebSocketFrame(incoming.remoteAddress() + " 离开\n"));
-                }
+//                for (Channel channel : group) {
+//                    channel.writeAndFlush(new TextWebSocketFrame(incoming.remoteAddress() + " 离开\n"));
+//                }
                 group.remove(ctx.channel());
             }
         }
@@ -144,11 +144,11 @@ public class WebSocket {
             if (msg instanceof FullHttpRequest){
 
                 System.out.println("====== " + ((FullHttpRequest) msg) + " ==========");
-                log.info(String.format("调试: %s", ((FullHttpRequest) msg).toString()));
+               // log.info(String.format("调试: %s", ((FullHttpRequest) msg).toString()));
 
                 String uri = ((FullHttpRequest) msg).uri();
                 System.out.println("房间号:" + uri);
-                log.info(String.format("建立连接: come http %s %s", ctx.channel().remoteAddress(),uri));
+               // log.info(String.format("建立连接: come http %s %s", ctx.channel().remoteAddress(),uri));
                 if (!channelGroups.containsKey(uri)){
                     channelGroups.put(uri, new DefaultChannelGroup(GlobalEventExecutor.INSTANCE));
 
@@ -157,7 +157,7 @@ public class WebSocket {
                     while (keys.hasMoreElements()){
                         roomList += keys.nextElement() + "  -  ";
                     }
-                    log.info(String.format("房间列表: %s", roomList));
+                   // log.info(String.format("房间列表: %s", roomList));
                 }
 
                 channelGroups.get(uri).add(ctx.channel());
@@ -219,14 +219,14 @@ public class WebSocket {
         private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame){
             //1. 接收到结束请求
             if (frame instanceof CloseWebSocketFrame){
-                log.info(String.format("请求结束: end webSocket %s", (CloseWebSocketFrame) frame.retain()).toString());
+               // log.info(String.format("请求结束: end webSocket %s", (CloseWebSocketFrame) frame.retain()).toString());
                 handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
                 return;
             }
 
             //2. 接受到ping请求
             if (frame instanceof PingWebSocketFrame){
-                log.info(String.format("ping命令: ping frame %s", frame.content().retain()).toString());
+              //  log.info(String.format("ping命令: ping frame %s", frame.content().retain()).toString());
                 ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
                 return;
             }
@@ -238,9 +238,9 @@ public class WebSocket {
 
             //4. 返回应答信息
             String request = ((TextWebSocketFrame) frame).text();
-            if (log.isLoggable(Level.INFO)){
-                log.info(String.format("%s receive %s", ctx.channel().toString(), request));
-            }
+//            if (log.isLoggable(Level.INFO)){
+//                log.info(String.format("%s receive %s", ctx.channel().toString(), request));
+//            }
 
 
             //ctx.channel().write(new TextWebSocketFrame(request + ", netty测试: " +  new Date().toString() + "\n"));
