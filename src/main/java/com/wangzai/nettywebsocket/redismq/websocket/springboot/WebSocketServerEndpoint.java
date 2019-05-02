@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,8 +14,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class WebSocketServerEndpoint {
     private static AtomicLong online = new AtomicLong(0);
     
-    private static CopyOnWriteArraySet<WebSocketServerEndpoint>
-            webSocketSet = new CopyOnWriteArraySet<>();
+    private static CopyOnWriteArrayList<WebSocketServerEndpoint>
+            webSocketSet = new CopyOnWriteArrayList<>();
     
     Session session;
 

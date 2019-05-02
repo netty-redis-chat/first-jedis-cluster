@@ -43,6 +43,7 @@ public class Client {
 
             //执行handler, 首先执行handlerAdd
             ChannelFuture future = start.connect("localhost", 8888).sync();
+//            ChannelFuture future = start.connect("localhost", 8080).sync();
 
             //等待handshakeFuture, 执行完handShake握手
             WebSocketClientHandler handler = (WebSocketClientHandler) future.channel().pipeline().get("WebSocketClientHandler");
@@ -65,7 +66,9 @@ public class Client {
         private WebSocketClientHandshaker handShaker;
         private ChannelPromise handshakeFuture;
         WebSocketClientHandler() throws URISyntaxException {
-            URI webSocketURI = new URI("ws://localhost:8080/view/stage");
+            URI webSocketURI = new URI("ws://localhost:8888/view/stage");
+//            URI webSocketURI = new URI("ws://localhost:8080/view/stage");
+//            URI webSocketURI = new URI("ws://localhost:8080/ws");
             HttpHeaders httpHeaders = new DefaultHttpHeaders();
             handShaker = WebSocketClientHandshakerFactory.newHandshaker(webSocketURI, WebSocketVersion.V13, (String)null, false, httpHeaders);
         }
