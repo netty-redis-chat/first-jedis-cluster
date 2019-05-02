@@ -16,9 +16,11 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import sun.misc.Cache;
 
 import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +59,7 @@ public class WebSocketCache
     private final ConcurrentHashMap<String, ChannelGroup> channelGroups = new ConcurrentHashMap<>();
     private final Logger log = Logger.getLogger(WebSocketHandler.class.getName());
     private final AtomicLong time = new AtomicLong(System.currentTimeMillis());
-
+    private final CopyOnWriteArrayList<String> cache = new CopyOnWriteArrayList<>();
 
     public void bind(int port){
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -292,14 +294,15 @@ public class WebSocketCache
                 }
             } else {
                 //缓存转发
-                RedisCluster.getJedisClusterCon().append("cache", request);
+                cache.add(request);
                 if (System.currentTimeMillis() - time.get() > 1000){
+                    String cacheString = cache.toString();
                     for (Channel channel : group){
-                        channel.writeAndFlush(new TextWebSocketFrame("[" + "弹幕: " + incoming.remoteAddress() + "]:   " + request));
+                        channel.writeAndFlush(new TextWebSocketFrame("[" + "弹幕: " + incoming.remoteAddress() + "]:   " + cacheString));
+                        cache.clear();
+                        System.out.println(cacheString);
                     }
                     time.set(System.currentTimeMillis());
-                }else {
-                    System.out.println("==============================缓存===================");
                 }
             }
 
