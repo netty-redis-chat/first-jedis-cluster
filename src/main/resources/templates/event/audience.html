@@ -82,8 +82,13 @@
         var uri = window.location.pathname;
         var id = uri.substring(uri.lastIndexOf("/"+1));
         // socket = new WebSocket("ws://localhost:8888/"+id);
-        // socket2 = new WebSocket("ws://localhost:8080/ws");
-        socket2 = new WebSocket("ws://localhost:8888/view/stage");
+        socket2 = new WebSocket("ws://localhost:8080/ws");
+        // socket2 = new WebSocket("ws://localhost:8889/view/stage");
+        // socket2 = new WebSocket("ws://localhost:8888/view/stage");
+        
+        //ngnix负载均衡
+        socket2 = new WebSocket("ws://localhost:8000/ws");
+        // socket2 = new WebSocket("ws://localhost:8000/view/stage");
         socket2.onmessage = function(event) {
             var ta = document.getElementById('responseText2');
             ta.value = ta.value + '\n' + event.data+'|'+new Date().toTimeString()

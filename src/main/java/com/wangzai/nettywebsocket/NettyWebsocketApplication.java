@@ -1,7 +1,8 @@
 package com.wangzai.nettywebsocket;
 
-import com.wangzai.nettywebsocket.netty.WebSocket;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -14,6 +15,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @MapperScan("com.wangzai.nettywebsocket.mapper")
 public class NettyWebsocketApplication {
 
+	static Logger log = LoggerFactory.getLogger(NettyWebsocketApplication.class);
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
 		return new JedisConnectionFactory();
@@ -29,6 +31,13 @@ public class NettyWebsocketApplication {
 
 //		NettyServer nettyServer = context.getBean(NettyServer.class);
 //		nettyServer.start();
-        new WebSocket().bind(8888);
+		
+		//log.info("--------before");
+        //new Thread(()->{
+		//	new WebSocket().bind(8888);
+		//}).start();
+		//log.info("-----------------------");
+        //new WebSocket().bind(8889);
+		//log.info("--------after");
 	}
 }

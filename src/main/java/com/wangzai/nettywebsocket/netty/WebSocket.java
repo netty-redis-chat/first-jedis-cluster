@@ -17,10 +17,7 @@ import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.util.Enumeration;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -251,9 +248,9 @@ public class WebSocket {
             ChannelGroup group = channelGroups.get(uri);
             for (Channel channel : group) {
                 if (channel != incoming) {
-                    channel.writeAndFlush(new TextWebSocketFrame("[" + incoming.remoteAddress() + "]:   " + request));
+                    channel.writeAndFlush(new TextWebSocketFrame("[" + incoming.remoteAddress() + "]:   " + request+"from "+incoming.localAddress()));
                 } else {
-                    channel.writeAndFlush(new TextWebSocketFrame("[you]:   " + request));
+                    channel.writeAndFlush(new TextWebSocketFrame("[you("+incoming.remoteAddress()+")]:   " + request+"from "+incoming.localAddress()));
                 }
             }
 
