@@ -3,7 +3,10 @@ package com.wangzai.nettywebsocket.service.impl;
 import com.wangzai.nettywebsocket.pojo.ChatRoom;
 import com.wangzai.nettywebsocket.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -33,8 +36,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 //                return null;
 //            }
 //        });
+//        redisTemplate.multi();
         redisTemplate.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), httpSession.getId());
         redisTemplate.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), (String) httpSession.getAttribute("username"));
+        //redisTemplate.exec();
 //        redisTemplate.opsForSet().add(redisChatRoomPrefix + chatRoom.getId(), "izaya");
         httpSession.setAttribute("room",chatRoom.getId());
     }
@@ -49,16 +54,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         if (redisTemplate.opsForSet().isMember(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username")) ) {
             return false;
         }
-//        redisTemplate.execute(new SessionCallback(){
-//            @Override
-//            public Object execute(RedisOperations redisOperations) throws DataAccessException {
-//                redisOperations.opsForSet().add(redisChatRoomPrefix + roomId, httpSession.getId());
-//                redisOperations.opsForSet().add(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
-//                return null;
-//            }
-//        });
-        redisTemplate.opsForSet().add(redisChatRoomPrefix + roomId, httpSession.getId());
-        redisTemplate.opsForSet().add(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
+        redisTemplate.execute(new SessionCallback(){
+            @Override
+            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                redisOperations.multi();
+                redisOperations.opsForSet().add(redisChatRoomPrefix + roomId, httpSession.getId());
+                redisOperations.opsForSet().add(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
+                return redisOperations.exec();
+            }
+        });
+//        redisTemplate.opsForSet().add(redisChatRoomPrefix + roomId, httpSession.getId());
+//        redisTemplate.opsForSet().add(redisChatRoomPrefix + roomId,  (String) httpSession.getAttribute("username"));
         httpSession.setAttribute("room",roomId);
         return true;
     }

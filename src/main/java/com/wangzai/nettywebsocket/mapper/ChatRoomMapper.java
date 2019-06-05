@@ -14,5 +14,5 @@ public interface ChatRoomMapper {
     List<ChatRoom> search(String keyword);
 
     void deleteChatRoom(Integer id);
-
+    
 }

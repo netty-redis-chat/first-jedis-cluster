@@ -59,9 +59,19 @@ public class EventServiceImpl implements EventService {
 //        });
         
         //事务管理
-        String role = (String) redisTemplate.opsForSet().pop(rolesKey);
-        redisTemplate.opsForHash().put(userRoleKey, id, role);
+        //String role = (String) redisTemplate.opsForSet().pop(rolesKey);
+        //redisTemplate.opsForHash().put(userRoleKey, id, role);
         //事务管理
+        
+        redisTemplate.execute(new SessionCallback(){
+            @Override
+            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                redisOperations.multi();
+                String role = (String)redisOperations.opsForSet().pop(rolesKey);
+                redisOperations.opsForHash().put(userRoleKey,id,role);
+                return redisOperations.exec();
+            }
+        });
         return true;
     }
 
